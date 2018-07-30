@@ -1,0 +1,40 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Resources:
+
+  AutoConfirm:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: nodejs8.10
+      Handler: auto-confirm-trigger
+      CodeUri: ./code
+      Description: Auto confirms the users signup on Cognito
+      MemorySize: 256
+      Timeout: 30
+
+  BathersPreference:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: nodejs8.10
+      Handler: get-user-bathers-preference
+      CodeUri: ./code
+      Description: Retreives the users bathers preference
+      MemorySize: 256
+      Timeout: 30
+      Policies:
+        - AWSLambdaExecute # Managed Policy
+        - Version: '2012-10-17' # Policy Document
+          Statement:
+            - Effect: Allow
+              Action:
+                - dynamo:query
+              Resource: 
+                !Join
+                  - ':'
+                  - - 'arn:aws:dynamodb'
+                    - !Ref 'AWS::Region'
+                    - !Ref 'AWS::AccountId'
+                    - 'table/my-pool-party-users-bathers*'
+      Environment:
+        Variables:
+          PoolPartyTable: my-pool-party-users-bathers
