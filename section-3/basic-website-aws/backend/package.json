@@ -1,0 +1,16 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "This repo contains the backend code for the basic crud website explanation for The Complete Serverless course on A Cloud Guru.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "validate": "cross-env AWS_PROFILE=personal sam validate -t ../template.yaml"
+  },
+  "keywords": [],
+  "author": "Julian Pittas <julian.pittas@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "cross-env": "^5.2.0"
+  }
+}
