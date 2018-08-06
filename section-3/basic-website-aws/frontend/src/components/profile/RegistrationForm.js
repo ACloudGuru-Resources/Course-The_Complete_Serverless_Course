@@ -19,7 +19,7 @@ class RegistrationForm extends React.Component {
     });
   }
 
-  handleSignup = ({ username, email, password, phone_number }) => {
+  handleSignup = ({ username, email, password }) => {
     let that = this;
     Auth.signUp({
       username,
@@ -35,6 +35,9 @@ class RegistrationForm extends React.Component {
           errorMessage: '',
           isError: false
         });
+        if (data.user) {
+          that.props.history.push('/');
+        }
       })
       .catch(err => {
         that.setState({
@@ -97,10 +100,12 @@ class RegistrationForm extends React.Component {
       labelCol: {
         xs: { span: 24 },
         sm: { span: 8 },
+        lg: { span: 8 },
       },
       wrapperCol: {
         xs: { span: 24 },
         sm: { span: 16 },
+        lg: { span: 16 },
       },
     };
 
@@ -119,7 +124,7 @@ class RegistrationForm extends React.Component {
 
     return (
       <Row>
-        <Col span={8} offset={7}>
+        <Col span={12} offset={4}>
           <Form onSubmit={this.handleSubmit}>
             <FormItem
               {...formItemLayout}

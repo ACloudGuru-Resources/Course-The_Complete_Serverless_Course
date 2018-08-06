@@ -4,7 +4,7 @@ import { Row, Col, Form, Avatar, Card } from 'antd';
 import SignInForm from './SignInForm';
 import Bathers from './Bathers';
 
-const Profile = ({ loggedInUser, APIEndpoint, profileUrl, isSignedIn, handleSignIn }) => {
+const Profile = ({ loggedInUser, APIEndpoint, profileUrl, isSignedIn, handleSignIn, identityId }) => {
     const WrappedSignInForm = Form.create()(SignInForm);
     const displayForm = !isSignedIn && <WrappedSignInForm handleSignIn={handleSignIn} />;
     const avatar = {
@@ -13,8 +13,6 @@ const Profile = ({ loggedInUser, APIEndpoint, profileUrl, isSignedIn, handleSign
         lineHeight: 100,
         borderRadius: 50
     };
-
-    console.log(loggedInUser);
 
     return (
         <Row>
@@ -25,10 +23,11 @@ const Profile = ({ loggedInUser, APIEndpoint, profileUrl, isSignedIn, handleSign
                             {profileUrl &&
                                 (<Avatar style={avatar} icon="user" src={profileUrl} />)
                             }
-                            <p>User: {loggedInUser.idToken.payload['cognito:username']}</p>
-                            <p>UserId: {loggedInUser.idToken.payload.sub}</p>
+                            <p><b>User:</b> {loggedInUser.idToken.payload['cognito:username']}</p>
+                            <p><b>Identity Id:</b> {identityId}</p>
+                            <p><b>User Sub:</b> {loggedInUser.idToken.payload.sub}</p>
                             <Bathers loggedInUser={loggedInUser} APIEndpoint={APIEndpoint} />
-                            <p>ID Token: <span style={styles.token}>{loggedInUser.idToken.jwtToken}</span></p>
+                            <p><b>ID Token:</b> <span style={styles.token}>{loggedInUser.idToken.jwtToken}</span></p>
                         </Card>
                     ) :
                         (
@@ -50,7 +49,7 @@ const styles = {
         backgroundColor: '#DFD8D9',
         display: 'block',
         padding: 2,
-        borderRadius: 3
+        borderRadius: 3,
     }
 }
 

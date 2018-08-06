@@ -12,5 +12,8 @@
   "license": "ISC",
   "devDependencies": {
     "cross-env": "^5.2.0"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.286.2"
   }
 }

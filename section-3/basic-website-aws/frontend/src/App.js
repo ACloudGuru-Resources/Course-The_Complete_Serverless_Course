@@ -25,7 +25,8 @@ class App extends Component {
     userLoggedIn: false,
     loggedInUser: null,
     imgURL: null,
-    verified: false
+    verified: false,
+    identityId: null
   }
 
   componentDidMount() {
@@ -38,17 +39,28 @@ class App extends Component {
 
   signOut = () => {
     Auth.signOut()
-      .then(data => {
+      .then(() => {
         this.setState({
           userLoggedIn: false,
-          loggedInUser: null
+          loggedInUser: null,
+          identityId: null
         });
       })
       .catch(err => console.log(err));
   }
 
+  handleSignUp = (data, history) => {
+    if (data) {
+      this.setState({
+        userLoggedIn: true,
+        verified: data.userConfirmed
+      });
+      history.push('/verify')
+    }
+  }
+
   setApplicationUser = (loggedInUser) => {
-    console.log(loggedInUser);
+    console.log('Logged in user: ', loggedInUser);
 
     this.setState({
       userLoggedIn: true,
@@ -58,13 +70,18 @@ class App extends Component {
 
     Auth.currentCredentials()
       .then((response) => {
-        console.log(response.data.IdentityId);
+        console.log('User Identity Id: ', response.data.IdentityId);
+        this.setState({
+          identityId: response.data.IdentityId
+        });
       })
       .catch((error) => console.error(error));
 
-    Storage.get('photo.jpg', { level: 'private' })
+    Storage.get('photo.jpg', {
+      level: 'private'
+    })
       .then(result => {
-        console.log(result);
+        console.log('storage get result: ', result);
         this.setState((state) => {
           state.loggedInUser['profileURL'] = result;
           return state;
@@ -82,6 +99,8 @@ class App extends Component {
           userLoggedIn={this.state.userLoggedIn}
           handleSignIn={this.setApplicationUser}
           loggedInUser={this.state.loggedInUser}
+          handleSignUp={this.handleSignUp}
+          identityId={this.state.identityId}
         />
       </Layout>
     );

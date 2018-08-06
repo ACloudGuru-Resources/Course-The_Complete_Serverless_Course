@@ -12,10 +12,17 @@ This repo contains the backend code for the basic website explanation for The Co
 - Docker
 - AWS Sam Cli (`pip install --user aws-sam-cli`)
 
+### Named profile
+Make sure you're using the correct AWS profile by exposing the profile name in the console/terminal window
+```
+On Unix > export AWS_PROFILE={my_profile_name}
+On Windows > set AWS_PROFILE={my_profile_name}
+```
+
 ### Resources
 First set up an S3 bucket to host your application code.
 ```
-aws s3 mb {My_bucket_name}
+aws s3 mb s3://{My_code_bucket_name}
 ```
 Then follow the deployment steps bellow.
 Finally, to set up the project resources, please visit the backendResources.md file
@@ -24,16 +31,11 @@ Finally, to set up the project resources, please visit the backendResources.md f
 
 This code uses the Serverless Application Model [(SAM)'s template](https://github.com/awslabs/serverless-application-model) 
 Once you've completed the above two setup requirements, you can deploy this code using the [AWS SAM Local Cli](https://github.com/awslabs/aws-sam-cli).
-Make sure you're using the correct AWS profile by exposing the profile name
-```
-On Unix > export AWS_PROFILE={my_profile_name}
-On Windows > set AWS_PROFILE={my_profile_name}
-```
 Once you've exposed your profile name, you can verify the template and deploy the sam functions
 ```
     sam validate
-    sam package --s3-bucket {My_bucket_name} --template-file template.yaml
-    sam deploy --stack-name {stack_name}
+    sam package --s3-bucket {My_code_bucket_name} --template-file template.yaml --output-template-file packaged.yaml
+    sam deploy --stack-name {stack_name} --template-file packaged.yaml --capabilities CAPABILITY_IAM
 ```
 
 

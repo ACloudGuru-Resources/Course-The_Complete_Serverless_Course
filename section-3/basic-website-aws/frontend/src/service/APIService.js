@@ -8,7 +8,7 @@ class APIService {
             ...options,
             headers: {
                 ...options.headers,
-                Authorization: jwtToken,
+                Authorization: `${jwtToken}`,
             },
         };
 
@@ -20,7 +20,7 @@ class APIService {
             'Content-Type': 'application/json',
             ...options,
         };
-        return fetch(`${this.APIEndpoint}/${path}`, callOptions).json();
+        return fetch(`${this.APIEndpoint}/${path}`, callOptions).then((response) => response.json());
     }
 }
 

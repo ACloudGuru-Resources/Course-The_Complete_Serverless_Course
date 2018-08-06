@@ -17,10 +17,9 @@ class Bathers extends React.Component {
                 this.props.loggedInUser.idToken.jwtToken
             );
 
-            console.log(response);
             responseJSON = { bathers: response.bathers };
         } catch (e) {
-
+            console.error('error getting bathers', e);
         }
 
         this.setState({
@@ -32,7 +31,7 @@ class Bathers extends React.Component {
     render() {
         return (
             <div>
-                {this.state.loading ? 'Loading...' : 'Bather preference: ' + this.state.bathers}
+                <b>Bather preference: </b>{this.state.loading ? 'Loading...' : `${this.state.bathers}`}
             </div>
         )
     }

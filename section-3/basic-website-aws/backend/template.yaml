@@ -6,8 +6,8 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Runtime: nodejs8.10
-      Handler: auto-confirm-trigger
-      CodeUri: ./code
+      Handler: auto-confirm-trigger.handler
+      CodeUri: ./src
       Description: Auto confirms the users signup on Cognito
       MemorySize: 256
       Timeout: 30
@@ -16,8 +16,8 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Runtime: nodejs8.10
-      Handler: get-user-bathers-preference
-      CodeUri: ./code
+      Handler: get-user-bathers-preference.handler
+      CodeUri: ./src
       Description: Retreives the users bathers preference
       MemorySize: 256
       Timeout: 30
@@ -27,7 +27,7 @@ Resources:
           Statement:
             - Effect: Allow
               Action:
-                - dynamo:query
+                - dynamodb:Query
               Resource: 
                 !Join
                   - ':'
