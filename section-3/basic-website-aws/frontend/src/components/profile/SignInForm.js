@@ -45,6 +45,12 @@ class SignInForm extends React.Component {
               loading: false
             });
           });
+      } else {
+        that.setState({
+          errorMessage: err.message,
+          isError: true,
+          loading: false
+        });
       }
     });
 

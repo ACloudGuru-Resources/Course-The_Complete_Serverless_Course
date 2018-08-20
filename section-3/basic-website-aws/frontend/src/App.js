@@ -2,20 +2,18 @@ import React, { Component } from 'react';
 import { Layout } from 'antd';
 
 /* Load amplofy */
-import Amplify, { Auth, Storage } from 'aws-amplify';
+import Amplify, { Auth } from 'aws-amplify';
+import AWS from 'aws-sdk';
 
 /* Load local files */
 import './App.css';
 import { Header } from './components/template/';
 import Main from './components/Main';
-import { poolData, bucket } from './config.json';
+import { poolData, bucket, region } from './config.json';
 
 /* Initialize amplify */
 Amplify.configure({
-  Auth: poolData,
-  Storage: {
-    bucket: bucket
-  }
+  Auth: poolData
 });
 
 
@@ -29,12 +27,59 @@ class App extends Component {
     identityId: null
   }
 
+  updatedProfile = (S3, fileName) => {
+    const params = {
+      Bucket: bucket,
+      Key: `${fileName}`
+    };
+
+    const url = S3.getSignedUrl('getObject', params);
+    console.log(url);
+    this.setState({
+      imgURL: url
+    });
+  }
+
+  uploadProfile = (e) => {
+    e.preventDefault();
+
+    let file = e.target.files[0];
+
+    Auth.currentCredentials()
+      .then((response) => {
+        const creds = response.data.Credentials;
+
+        const S3 = new AWS.S3({
+          apiVersion: '2006-03-01',
+          params: { Bucket: bucket },
+          region: region,
+          credentials: new AWS.Credentials(creds.AccessKeyId, creds.SecretKey, creds.SessionToken)
+        });
+
+        const params = {
+          Body: file,
+          ContentType: file.type,
+          Bucket: bucket,
+          Key: `${response.identityId}/profile.png`
+        };
+
+        S3.putObject(params).promise().then(() => {
+          console.log('upload complete');
+          this.updatedProfile(S3, `${response.identityId}/profile.png`);
+        }).catch((e) => {
+          // console.error(e);
+        });
+      });
+  }
+
   componentDidMount() {
     Auth.currentSession()
       .then((response) => {
         this.setApplicationUser(response);
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        //console.error(error)
+      });
   }
 
   signOut = () => {
@@ -70,24 +115,26 @@ class App extends Component {
 
     Auth.currentCredentials()
       .then((response) => {
-        console.log('User Identity Id: ', response.data.IdentityId);
+
         this.setState({
           identityId: response.data.IdentityId
         });
-      })
-      .catch((error) => console.error(error));
 
-    Storage.get('photo.jpg', {
-      level: 'private'
-    })
-      .then(result => {
-        console.log('storage get result: ', result);
-        this.setState((state) => {
-          state.loggedInUser['profileURL'] = result;
-          return state;
+        const creds = response.data.Credentials;
+
+        const S3 = new AWS.S3({
+          apiVersion: '2006-03-01',
+          params: { Bucket: bucket },
+          region: region,
+          credentials: new AWS.Credentials(creds.AccessKeyId, creds.SecretKey, creds.SessionToken)
         });
-      })
-      .catch(err => console.log(err));
+
+        this.updatedProfile(S3, `${response.identityId}/profile.png`);
+
+      }).catch((e) => {
+        // console.error(e);
+      });
+
   }
 
   render() {
@@ -101,6 +148,8 @@ class App extends Component {
           loggedInUser={this.state.loggedInUser}
           handleSignUp={this.handleSignUp}
           identityId={this.state.identityId}
+          uploadProfile={this.uploadProfile}
+          imgURL={this.state.imgURL}
         />
       </Layout>
     );

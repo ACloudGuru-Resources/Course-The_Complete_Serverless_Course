@@ -9,7 +9,6 @@ import SignUp from './SignUp';
 const { Content } = Layout;
 
 const Main = (props) => {
-    console.log(props);
     return (
         <Layout className="layout">
             <Content>
@@ -20,7 +19,7 @@ const Main = (props) => {
                     </header>
                     <div className="App-intro">
                         <Switch>
-                            <Route exact path="/" render={() => <Profile identityId={props.identityId} isSignedIn={props.userLoggedIn} handleSignIn={props.handleSignIn} loggedInUser={props.loggedInUser} profileUrl={(props.loggedInUser && props.loggedInUser.profileURL) || ''} />} />
+                            <Route exact path="/" render={() => <Profile uploadProfile={props.uploadProfile} identityId={props.identityId} isSignedIn={props.userLoggedIn} handleSignIn={props.handleSignIn} loggedInUser={props.loggedInUser} profileUrl={props.imgURL} />} />
                             <Route exact path="/signup" render={(navProps) => <SignUp {...navProps} userLoggedIn={props.userLoggedIn} handleSignUp={props.handleSignUp} />} />
                         </Switch>
                     </div>

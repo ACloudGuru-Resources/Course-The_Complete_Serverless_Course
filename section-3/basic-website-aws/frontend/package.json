@@ -6,6 +6,7 @@
     "antd": "^3.5.3",
     "aws-amplify": "^0.4.1",
     "aws-amplify-react": "^0.1.47",
+    "aws-sdk": "^2.296.0",
     "prop-types": "^15.6.1",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",

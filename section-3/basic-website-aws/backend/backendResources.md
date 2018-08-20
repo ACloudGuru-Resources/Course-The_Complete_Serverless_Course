@@ -11,7 +11,7 @@
 2. Click on `Tables`
 3. Click `Create table`
 * Table name: my-pool-party-users-bathers
-* Primary Key: user-id, String
+* Primary Key: user_id, String
 Use default settings: tick
 4. Click `Create`
 
@@ -35,14 +35,11 @@ paste the following:
             "Effect": "Allow",
             "Principal": "*",
             "Action": [
-                "s3:DeleteObject",
                 "s3:GetObject",
-                "s3:PutObject"
+                "s3:PutObject",
+                "s3:PutObjectAcl"
             ],
-            "Resource": [
-                "arn:aws:s3:::acg-pool-party/private/${cognito-identity.amazonaws.com:sub}",
-                "arn:aws:s3:::acg-pool-party/private/${cognito-identity.amazonaws.com:sub}/*"
-            ]
+            "Resource": "arn:aws:s3:::acg-pool-party/${cognito-identity.amazonaws.com:sub}/*"
         },
         {
             "Sid": "Stmt1487688849187",
@@ -130,7 +127,7 @@ click next step
 click save changes
 Click create pool
 
-### Create an idenity pool for S3 access
+### 6. Create an identity pool for S3 access
 Click on federated identities in 
 * Identity pool name: pool_party
 * Authentication providers
@@ -148,7 +145,7 @@ Click Go To Dashboard
 Click Edit idenity pool
 Copy Identity pool ID
 
-### 6. Setting up Authentication with API Gateway
+### 7. Setting up Authentication with API Gateway
 1. Navigate to API Gateway
 2. Click on 'acg-pool-party'
 3. Add an authorizer :
@@ -168,3 +165,5 @@ Copy Identity pool ID
     Authorization: cognito_auth
     HTTP Request Headers: Name = Authorization
 11. `Action` -> `Deploy API`
+
+### 8. Hosting on S3
