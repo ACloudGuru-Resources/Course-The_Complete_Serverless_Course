@@ -1,4 +1,11 @@
-# AWS Lab
+# AWS Basic Website Lab
+The purpose of this lab is to familiarise yourself with the components of a Serverless website using AWS.
+The Project will run through setting up:
+- A DynamoDB Table
+- Three S3 buckets
+- A Cognito User Pool
+- A Cognito Identity Pool
+- API Gateway
 
 ## Prerequisites
 - AWS CLI
