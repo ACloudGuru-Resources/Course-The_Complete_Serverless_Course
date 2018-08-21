@@ -1,10 +1,12 @@
 {
     "poolData": {
-        "identityPoolId": "xx-xxxx-x:xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
         "region": "xx-xxxx-x",
         "userPoolId": "xx-xxxx-x_xxxxxxxxx",
-        "userPoolWebClientId": "xxxxxxxxxxxxxxxxxxxxxxxxxx"
+        "userPoolWebClientId": "xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "authenticationFlowType": "USER_PASSWORD_AUTH",
+        "identityPoolId": "xx-xxxx-x:xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
     },
     "APIEndpoint": "https://xxxxxxxxxx.execute-api.xx-xxxx-x.amazonaws.com/dev",
-    "bucket": "YOUR BUCKET NAME"
+    "bucket": "YOUR BUCKET NAME",
+    "region": "xx-xxxx-x"
 }
