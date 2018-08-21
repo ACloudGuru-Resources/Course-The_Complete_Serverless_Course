@@ -1,4 +1,4 @@
-# AWS Basic Website Lab
+# Basic Website Lab (AWS)
 The purpose of this lab is to familiarise yourself with the components of a Serverless website using AWS.
 The Project will run through setting up:
 - A DynamoDB Table
@@ -7,7 +7,11 @@ The Project will run through setting up:
 - A Cognito Identity Pool
 - API Gateway
 
+A Basic overview of the architecture:
+![AWS User Case](./AWS_User_Case.png)
+
 ## Prerequisites
+- An AWS User account with an Access Key and Secret Access Key
 - AWS CLI
 - NodeJS
 
@@ -84,7 +88,7 @@ paste the following:
 8. Click `Save`
 
 
-### 3. Please deploy the serverless functions, see [README.MD](./README.MD)
+### 3. Please deploy the serverless functions, see [README.MD](./backend/README.MD)
 
 
 ### 4. Setting up API Gateway
@@ -173,4 +177,33 @@ Copy Identity pool ID
     HTTP Request Headers: Name = Authorization
 11. `Action` -> `Deploy API`
 
-### 8. Hosting on S3
+### 8. Hosting on S3 (Extra)
+1. Navigate to S3
+2. Click `Create` bucket
+* Bucket Name: acg-pool-party-hosting
+* Region: same as lambda
+3. Click `Create`
+4. Click on the new Bucket
+5. Click `Permissions`
+6. Click `Bucket policy`
+paste the following:
+```JSON
+{
+    "Version": "2008-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::[YOUR BUCKET NAME]/*"
+        }
+    ]
+}
+```
+7. Click on `Save`, then click `Access Control List`
+8. Click on Everyone under Public Access, Tick List objects then click Save
+9. Click on Properties
+10. Click on Static website hosting
+11. Tick Use this bucket to host a website, click save
+12. Navigate to the frontend directory in a terminal
+13. type `aws s3 sync --acl 'public-read' --delete ./ "s3://[YOUR BUCKET NAME]/" --profile [YOUR PROFILE NAME]`
