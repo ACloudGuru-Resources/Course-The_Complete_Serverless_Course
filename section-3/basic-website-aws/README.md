@@ -1,5 +1,5 @@
 # Basic Website Lab (AWS)
-The purpose of this lab is to familiarise yourself with the components of a Serverless website using AWS.
+The purpose of this lab is to familiarize yourself with the components of a Serverless website using AWS.
 The Project will run through setting up:
 - A DynamoDB Table
 - Three S3 buckets
@@ -21,7 +21,7 @@ A Basic overview of the architecture:
 1. Navigate to DynamoDB
 2. Click on `Tables`
 3. Click `Create table`
-* Table name: my-pool-party-users-bathers
+* Table name:  e.g. my-pool-party-users-bathers
 * Primary Key: user_id, String
 Use default settings: tick
 4. Click `Create`
@@ -29,7 +29,7 @@ Use default settings: tick
 ### 2. Create S3 user Image bucket
 1. Navigate to S3
 2. Click `Create` bucket
-* Bucket Name: acg-pool-party
+* Bucket Name: e.g. acg-pool-party
 * Region: same as lambda
 3. Click `Create`
 4. Click on the new Bucket
@@ -50,7 +50,7 @@ paste the following:
                 "s3:PutObject",
                 "s3:PutObjectAcl"
             ],
-            "Resource": "arn:aws:s3:::acg-pool-party/${cognito-identity.amazonaws.com:sub}/*"
+            "Resource": "arn:aws:s3:::[YOUR BUCKET NAME]/${cognito-identity.amazonaws.com:sub}/*"
         },
         {
             "Sid": "Stmt1487688849187",
@@ -58,8 +58,8 @@ paste the following:
             "Principal": "*",
             "Action": "s3:GetObject",
             "Resource": [
-                "arn:aws:s3:::acg-pool-party/public",
-                "arn:aws:s3:::acg-pool-party/public/*"
+                "arn:aws:s3:::[YOUR BUCKET NAME]/public",
+                "arn:aws:s3:::[YOUR BUCKET NAME]/public/*"
             ]
         }
     ]
