@@ -111,6 +111,8 @@ paste the following:
 * Lambda Function: acg-pool-party-BathersPreference-xxxxxxxxxx
 11. Click `Save`
 12. Click `OK` to give permission to the lambda function
+** Do step 7 to 12 again using a PUT method, and selecting the acg-pool-party-SetBathersPreference-xxxxxxxxxx method
+
 13. `Actions` -> `Deploy API`
 * Deployment stage: [New Stage]
 * Stage name: dev

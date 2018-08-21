@@ -38,6 +38,7 @@ exports.handler = async (event, context, callback) => {
     const payload = {
         statusCode: sub ? 200 : 401,
         body: JSON.stringify({
+            'sub': sub || 'Unauthorized',
             'bathers': bathers || 'None set'
         }),
         headers: {
