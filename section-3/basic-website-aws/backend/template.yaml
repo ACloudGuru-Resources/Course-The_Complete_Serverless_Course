@@ -34,10 +34,10 @@ Resources:
                   - - 'arn:aws:dynamodb'
                     - !Ref 'AWS::Region'
                     - !Ref 'AWS::AccountId'
-                    - 'table/my-poolparty-bathers*'
+                    - 'table/my-pool-party-users-bathers*'
       Environment:
         Variables:
-          PoolPartyTable: my-poolparty-bathers
+          PoolPartyTable: my-pool-party-users-bathers
 
   BathersPreference:
     Type: AWS::Serverless::Function
@@ -61,7 +61,7 @@ Resources:
                   - - 'arn:aws:dynamodb'
                     - !Ref 'AWS::Region'
                     - !Ref 'AWS::AccountId'
-                    - 'table/my-poolparty-bathers*'
+                    - 'table/my-pool-party-users-bathers*'
       Environment:
         Variables:
-          PoolPartyTable: my-poolparty-bathers
+          PoolPartyTable: my-pool-party-users-bathers
