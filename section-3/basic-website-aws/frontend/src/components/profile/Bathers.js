@@ -42,6 +42,7 @@ class Bathers extends React.Component {
                 {
                     method: 'PUT',
                     body: JSON.stringify({
+			            user_id: this.props.loggedInUser.idToken.jwtToken,
                         bathers: bathersPreference
                     })
                 }
