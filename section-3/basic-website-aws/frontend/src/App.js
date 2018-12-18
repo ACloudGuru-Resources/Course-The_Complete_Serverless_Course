@@ -47,6 +47,7 @@ class App extends Component {
 
     Auth.currentCredentials()
       .then((response) => {
+
         const creds = response.data.Credentials;
 
         const S3 = new AWS.S3({
@@ -115,7 +116,8 @@ class App extends Component {
 
     Auth.currentCredentials()
       .then((response) => {
-
+        console.log('currentCredentials')
+        console.log(response);
         this.setState({
           identityId: response.data.IdentityId
         });
