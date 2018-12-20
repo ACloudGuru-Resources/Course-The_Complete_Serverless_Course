@@ -4,7 +4,8 @@ The course can be found at [https://acloud.guru/learn/the-complete-serverless-co
 
 
 ## Sections
-[Section 3 - Providers section code](./section-3) - Three examples of how to create a serverless website using AWS, Azure and GCP.
+[Section 4 - Platform Providers (AWS) section code](./section-4) - Code samples and starter templates from the Platform providers - AWS section
+[Projects](./projects) - Project instructions and solutions to the Practical Serverless section
 
 <hr>
 
