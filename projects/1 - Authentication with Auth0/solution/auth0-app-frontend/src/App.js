@@ -85,9 +85,7 @@ class App extends Component {
     this.setState({ accessToken: null, profile: null });
 
     // Clear the Auth0 session then redirect back to the homepage
-    this.lock.logout({
-      returnTo: 'http://localhost:3000'
-    });
+    this.lock.logout();
 
   }
   render() {

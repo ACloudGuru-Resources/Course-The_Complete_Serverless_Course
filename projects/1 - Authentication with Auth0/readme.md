@@ -1,5 +1,9 @@
 # Project 1 - Authentication with Auth0
 
+## Prerequisites
+- NodeJS 8.10+
+- An IDE
+
 ## Steps
 
 ### Backend
@@ -281,4 +285,8 @@ export default App;
 
 #### I get a message from Auth0 starting with oops
 Go back to your Auth0 application page and ensure that you've put in the correct url when you run `npm start` 
-Also check that you've added the correct `domain` and `callback url` to the Auth0 constructor
+Also check that you've added the correct `DOMAIN` and `CLIENT_ID` to the Auth0 constructor
+
+## Reference
+
+Auth0 Lock v11 API - https://auth0.com/docs/libraries/lock/v11/api
