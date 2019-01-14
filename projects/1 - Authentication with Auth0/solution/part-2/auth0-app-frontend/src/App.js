@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
 import { Auth0Lock } from 'auth0-lock';
+import axios from 'axios';
 import './App.css';
+import * as Config from './creds.json';
+
+const API_BASE_URL = Config.API_BASE_URL;
 
 class App extends Component {
 
   state = {
     accessToken: null,
-    profile: null
+    profile: null,
+    response: ''
   }
 
   constructor() {
@@ -14,8 +19,8 @@ class App extends Component {
 
     // Instantiate the Auth0Lock library
     const lock = new Auth0Lock(
-      'CLIENT_ID',
-      'DOMAIN'
+      Config.AUTH0_CLIENT_ID,
+      Config.AUTH0_DOMAIN
     );
     this.lock = lock;
 
@@ -88,6 +93,44 @@ class App extends Component {
     this.lock.logout();
 
   }
+  checkFunction = () => {
+    axios.get('/hello', {
+      baseURL: API_BASE_URL,
+      // headers: {
+      //   Authentication: this.state.accessToken ? `Bearer ${this.state.accessToken}` : null
+      // }
+    })
+      .then((response) => {
+        this.setState({
+          response: (response && response.data && response.data.message) || 'Invalid response'
+        });
+      })
+      .catch((error) => {
+        let errorMessage = '';
+        //This is from the docs https://github.com/axios/axios#handling-errors
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          errorMessage = `Response Error: ${error.response.data}`;
+        } else if (error.request) {
+          // The request was made but no response was received
+          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+          // http.ClientRequest in node.js
+          errorMessage = `Request Error: ${error.message}`;
+        } else if (error.message) {
+          // Something happened in setting up the request that triggered an Error
+          errorMessage = `Error ${error.message}`;
+        }
+        else {
+          // Something happened in setting up the request that triggered an Error
+          errorMessage = `Error ${error}`;
+        }
+
+        this.setState({
+          response: errorMessage
+        });
+      });
+  }
   render() {
     return (
       <div className="App">
@@ -117,6 +160,14 @@ class App extends Component {
                 </div>
               )
           }
+
+          <div>
+            <button onClick={this.checkFunction}>Hello?</button>
+            <div>
+              Response: {this.state.response}
+            </div>
+          </div>
+
         </header>
       </div >
     );

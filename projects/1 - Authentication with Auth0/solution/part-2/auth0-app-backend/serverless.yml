@@ -1,0 +1,16 @@
+service: auth0-backend
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  stage: dev
+  region: us-east-1
+
+functions:
+  hello:
+    handler: src/hello-world/handler.hello
+    events:
+      - http:
+          path: hello
+          method: get
+          cors: true
