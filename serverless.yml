@@ -1,0 +1,14 @@
+service: datalyzer
+
+provider:
+  name: aws
+  runtime: python3.7
+  profile: datalyzer-admin
+
+functions:
+  ingest_gdelt_data:
+    handler: handler.ingest_gdelt_data
+    events:
+      - sns:
+          arn: arn:aws:sns:us-east-1:928094251383:gdelt-csv
+          topicName: gdelt-csv
