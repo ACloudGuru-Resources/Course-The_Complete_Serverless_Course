@@ -292,11 +292,11 @@ export default App;
 ```
 3. Change into the new `cd auth0-app-backend` then run
 ```bash
-  npm install -y
-  npm install axios --save
+  npm int -y
+  npm install jsonwebtoken request request-promise --save
 ```
-4. Make a new directories called `src/authorizer` and `src/hello-world`
-5. Move `handler.js` into `src/hello-world/` and add the headers return object
+4. Make a new directories called `auth0-app-backend/src/authorizer` and `auth0-app-backend/src/hello-world`
+5. Move `handler.js` into `auth0-app-backend/src/hello-world/` and add the headers return object so the file contains the following:
 ```javascript
 'use strict';
 
@@ -312,8 +312,6 @@ module.exports.hello = async (event, context) => {
     }
   };
 
-  // Use this code if you don't use the http event with the LAMBDA-PROXY integration
-  // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
 };
 
 ```
@@ -356,14 +354,17 @@ const API_BASE_URL = '';
 ```
 3. Create a new fat arrow class function called `checkFunction` and fill it with the axios request to your API.
 On success, set the state to the response of the function, also add some error handling
-```
+```javascript
 checkFunction = () => {
-  axios.get('/hello', {
-      baseURL: API_BASE_URL
+    axios.get('/hello', {
+      baseURL: API_BASE_URL,
+      // headers: {
+      //   Authentication: this.state.accessToken ? `Bearer ${this.state.accessToken}` : null
+      // }
     })
       .then((response) => {
         this.setState({
-          response: response.data
+          response: (response && response.data && response.data.message) || 'Invalid response'
         });
       })
       .catch((error) => {
@@ -372,29 +373,109 @@ checkFunction = () => {
         if (error.response) {
           // The request was made and the server responded with a status code
           // that falls out of the range of 2xx
-          errorMessage = error.response.data;
+          errorMessage = `Response Error: ${error.response.data}`;
         } else if (error.request) {
           // The request was made but no response was received
           // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
           // http.ClientRequest in node.js
-          errorMessage = error.request;
-        } else {
+          errorMessage = `Request Error: ${error.message}`;
+        } else if (error.message) {
           // Something happened in setting up the request that triggered an Error
           errorMessage = `Error ${error.message}`;
+        }
+        else {
+          // Something happened in setting up the request that triggered an Error
+          errorMessage = `Error ${error}`;
         }
 
         this.setState({
           response: errorMessage
         });
       });
-}
+  }
 ```
+4. Test it out by logging in and clicking the `Hello?` button. At the moment, anyone can call this API endpoint, You can log out and still use the Hello button. We need to validate our JWT we received from Auth0 and only allow authorized users.
+Switch back to the auth0-app-backend directory and add a new directory called `auth0-app-backend/src/authorizer/`. Then create two files `authorizer.js` and `handler.js`
+
+5. In `handler.js` add the following: 
+```javascript
+'use strict';
+
+/**
+ * Required Env consts:
+ * AUTH0_DOMAIN
+ */
+
+const auth0RS256TokenValidator = require('./authorizer');
+
+const generatePolicy = (principalId, effect, resource) => {
+
+    const authResponse = {
+        principalId
+    };
+
+    if (effect && resource) {
+        const policyDocument = {
+            Version: '2012-10-17',
+            Statement: [
+                {
+                    Action: 'execute-api:Invoke', // default action
+                    Effect: effect,
+                    Resource: resource,
+                }
+            ]
+        }
+        authResponse.policyDocument = policyDocument;
+    }
+
+    return authResponse;
+};
+
+module.exports.handler = async (event) => {
+
+    const authToken = event.authorizationToken;
+    const methodArn = event.methodArn;
+    const Auth0ApiBaseUrl = process.env.AUTH0_DOMAIN;
+
+    if (!methodArn) {
+        throw new Error('Missing method ARN in event. Can only be called as an API Gateway Authorizer');
+    }
+
+    // Validate the authorization token
+    await auth0RS256TokenValidator(authToken, Auth0ApiBaseUrl, 'RS256');
+
+    // Generate a response for the token that allows the user to call the API endpoint
+    return generatePolicy('user', 'allow', methodArn);
+
+};
+
+```
+
+6. Copy the `authorizer.js` from the base directory into this directory
+7. Deploy your changes with `sls deploy -v` and take note of the `ServiceEndpoint`. We need to attach the authorizer to the API gateway and make sure it's used for our Hello function
+8. Log into the AWS console, click on the services drop down then API Gateway.
+9. Click on `dev-auth0-backend` then Authorizers in the side bar
+10. Click `+ Create New Authorizer` 
+11. Fill in the following, then click `Create`:
+Name: auth0-authorizer
+Type: Lambda
+Lambda Function: auth0-backend-dev-authorizer
+Lambda Invoke Role: (blank)
+Lambda Event Payload: Token
+Token Source: Authorization
+Token Validation: (blank)
+Authorization Caching: Enabled
+TTL (seconds): 300
+12. You'll receive a modal pop-up asking to add permission to lambda function. Click `Grant & Create`
+13. Now in the sidebar, click on `Resources` then `GET` under `/hello` then on the `Method Request` header
+14. Click on the pencil next to `Authorization` and select the lambda `autho0-authorizer`. If you don't see it in the list, refresh the page. After you select it, make sure to click on the little tick next to the field.
+15. Deploy the API by clicking `Actions` -> `Deploy API` -> Deployment stage: dev -> `Deploy`
 
 ## Troubleshooting
 
 #### I get a message from Auth0 starting with oops
 Go back to your Auth0 application page and ensure that you've put in the correct url when you run `npm start` 
-Also check that you've added the correct `DOMAIN` and `CLIENT_ID` to the Auth0 constructor
+Also check that you've added the correct `DOMAIN` and `CLIENT_ID` to the Auth0 constructor.
 
 ## Reference
 

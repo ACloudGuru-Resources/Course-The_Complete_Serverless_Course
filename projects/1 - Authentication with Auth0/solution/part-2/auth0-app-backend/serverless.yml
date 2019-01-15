@@ -14,3 +14,10 @@ functions:
           path: hello
           method: get
           cors: true
+  
+  authorizer:
+    handler: src/authorizer/handler.handler
+    environment:
+      AUTH0_DOMAIN: csct.au.auth0.com
+
+  

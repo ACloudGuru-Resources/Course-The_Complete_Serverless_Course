@@ -9,7 +9,7 @@ const API_BASE_URL = Config.API_BASE_URL;
 class App extends Component {
 
   state = {
-    accessToken: null,
+    idToken: null,
     profile: null,
     response: ''
   }
@@ -17,10 +17,22 @@ class App extends Component {
   constructor() {
     super();
 
+    const params = {
+      autoclose: true,
+      oidcConformant: true,
+      auth: {
+        params: {
+          scope: 'openid profile email'
+        },
+        responseType: 'token id_token'
+      }
+    };
+
     // Instantiate the Auth0Lock library
     const lock = new Auth0Lock(
       Config.AUTH0_CLIENT_ID,
-      Config.AUTH0_DOMAIN
+      Config.AUTH0_DOMAIN,
+      params
     );
     this.lock = lock;
 
@@ -32,14 +44,14 @@ class App extends Component {
   componentWillMount() {
 
     // Check the local storage for the accessToken and profile information
-    const accessToken = localStorage.getItem('accessToken');
+    const idToken = localStorage.getItem('idToken');
     const profile = localStorage.getItem('profile');
 
-    if (accessToken && profile) {
+    if (idToken && profile) {
 
       // If they exist, load them into state
       this.setState({
-        accessToken: accessToken,
+        idToken: idToken,
         profile: JSON.parse(profile)
       });
 
@@ -48,7 +60,6 @@ class App extends Component {
   }
 
   onAuthentication = (authResult) => {
-
     // If we've authenticated, we'll have an access token.
     // Use that access token to make an api call to Auth0 and retreive the user's profile information
     this.lock.getUserInfo(authResult.accessToken, (error, profile) => {
@@ -60,12 +71,12 @@ class App extends Component {
 
       // After we get the profile, save both the accessToken and profile information
       // into the local storage
-      localStorage.setItem('accessToken', authResult.accessToken);
+      localStorage.setItem('idToken', authResult.idToken);
       localStorage.setItem('profile', JSON.stringify(profile));
 
       // Populate the state with the accessToken and local storage
       this.setState({
-        accessToken: authResult.accessToken,
+        idToken: authResult.idToken,
         profile: profile
       });
 
@@ -83,22 +94,24 @@ class App extends Component {
   logout = () => {
 
     // Clear the localStorage
-    localStorage.removeItem('accessToken');
+    localStorage.removeItem('idToken');
     localStorage.removeItem('profile');
 
     // Clean the state
-    this.setState({ accessToken: null, profile: null });
+    this.setState({ idToken: null, profile: null });
 
     // Clear the Auth0 session then redirect back to the homepage
     this.lock.logout();
 
   }
   checkFunction = () => {
+    const idToken = this.state.idToken;
+    console.log(idToken);
     axios.get('/hello', {
       baseURL: API_BASE_URL,
-      // headers: {
-      //   Authentication: this.state.accessToken ? `Bearer ${this.state.accessToken}` : null
-      // }
+      headers: {
+        Authorization: idToken ? `Bearer ${idToken}` : null
+      }
     })
       .then((response) => {
         this.setState({
@@ -137,7 +150,7 @@ class App extends Component {
         <header className="App-header">
 
           {
-            this.state.accessToken ?
+            this.state.idToken ?
               (
                 // We're logged in
                 // Load the user's name and a logout button
