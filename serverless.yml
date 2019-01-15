@@ -4,10 +4,17 @@ provider:
   name: aws
   runtime: python3.7
   profile: datalyzer-admin
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "s3:GetObject"
+      Resource:
+        - "arn:aws:s3:::gdelt-open-data/*"
 
 functions:
   ingest_gdelt_data:
     handler: handler.ingest_gdelt_data
+    timeout: 60
     events:
       - sns:
           arn: arn:aws:sns:us-east-1:928094251383:gdelt-csv
