@@ -4,12 +4,18 @@ provider:
   name: aws
   runtime: python3.7
   profile: datalyzer-admin
+  environment:
+    DATALYZER_INGEST_STREAM_NAME: datalyzer_ingest_stream
   iamRoleStatements:
     - Effect: "Allow"
       Action:
         - "s3:GetObject"
       Resource:
         - "arn:aws:s3:::gdelt-open-data/*"
+    - Effect: "Allow"
+      Action:
+        - "firehose:PutRecord"
+      Resource: "arn:aws:firehose:us-east-1:016789099664:deliverystream/datalyzer_ingest_stream"
 
 functions:
   ingest_gdelt_data:
