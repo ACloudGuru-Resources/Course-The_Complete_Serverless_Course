@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 const { Header } = Layout;
 
-const AppHeader = ({ signInHandler, signUpHandler, signOutHandler, authenticated }) => (
+const AppHeader = ({ signInHandler, signOutHandler, authenticated }) => (
     <Header>
         <div className="logo" />
         <Menu
@@ -15,20 +15,13 @@ const AppHeader = ({ signInHandler, signUpHandler, signOutHandler, authenticated
             {authenticated ?
                 (
                     <Menu.Item key="1">
-                        <a onClick={signOutHandler} >Sign out</a>
+                        <button className="buttonLink" onClick={signOutHandler} >Sign out</button>
                     </Menu.Item>
                 )
                 :
                 (
                     <Menu.Item key="1">
-                        <a onClick={signInHandler} >Sign in</a>
-                    </Menu.Item>
-                )
-            }
-            {!authenticated &&
-                (
-                    < Menu.Item key="2">
-                        <a onClick={signUpHandler} >Register</a>
+                        <button className="buttonLink" onClick={signInHandler} >Sign in</button>
                     </Menu.Item>
                 )
             }
@@ -37,6 +30,7 @@ const AppHeader = ({ signInHandler, signUpHandler, signOutHandler, authenticated
 );
 
 AppHeader.propTypes = {
+    signInHandler: PropTypes.func.isRequired,
     signOutHandler: PropTypes.func.isRequired,
     authenticated: PropTypes.bool.isRequired
 };

@@ -19,3 +19,21 @@
   font-size: large;
   padding-top: 20px;
 }
+
+.buttonLink {
+    background-color: transparent;
+    border: 0px solid transparent;
+    height: 100%;
+    width: 100%;
+    color: white;
+}
+
+.buttonLink:hover {
+    background-color: white;
+    color: #222;
+    cursor: pointer;
+}
+
+.ant-layout-header {
+  height: auto;
+}

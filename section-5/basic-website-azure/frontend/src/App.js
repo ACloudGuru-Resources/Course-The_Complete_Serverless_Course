@@ -120,7 +120,7 @@ class App extends Component {
   render() {
     return (
       <Layout className="layout">
-        <Header signInHandler={this.signIn} signUpHandler={this.signUp} signOutHandler={this.signOut} authenticated={this.state.authenticated} />
+        <Header signInHandler={this.signIn} signOutHandler={this.signOut} authenticated={this.state.authenticated} />
         <Main
           authenticated={this.state.authenticated}
           handleSignIn={this.signIn}
