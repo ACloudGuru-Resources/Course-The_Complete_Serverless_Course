@@ -66,12 +66,8 @@ class App extends Component {
 
   }
 
-  signUp = async () => {
-    await hello.login('azureADSignup');
-  }
-
   signIn = async () => {
-    await hello.login('azureADSignin');
+    await hello.login('azureAD');
   }
 
   signOut = async () => {
@@ -83,8 +79,7 @@ class App extends Component {
 
     const {
       tenantName,
-      signUpPolicyName,
-      signInPolicyName,
+      policyName,
       redirectUrl,
       backendClientApiID,
       backendClientScopeName,
@@ -92,32 +87,17 @@ class App extends Component {
     } = config;
 
     hello.init({
-      azureADSignin: {
+      azureAD: {
         name: 'Azure Active Directory B2C',
         oauth: {
           version: 2,
-          auth: getAuthUrl(tenantName, signInPolicyName),
-          grant: getGrantUrl(tenantName, signInPolicyName)
+          auth: getAuthUrl(tenantName, policyName),
+          grant: getGrantUrl(tenantName, policyName)
         },
         refresh: true,
         scope_delim: ' ',
         logout: function () {
-          window.location = getLogoutUrl(tenantName, signInPolicyName, redirectUrl);
-          return true
-        },
-        form: false
-      },
-      azureADSignup: {
-        name: 'Azure Active Directory B2C',
-        oauth: {
-          version: 2,
-          auth: getAuthUrl(tenantName, signUpPolicyName),
-          grant: getGrantUrl(tenantName, signUpPolicyName)
-        },
-        refresh: true,
-        scope_delim: ' ',
-        logout: function () {
-          window.location = getLogoutUrl(tenantName, signUpPolicyName, redirectUrl);
+          window.location = getLogoutUrl(tenantName, policyName, redirectUrl);
           return true
         },
         form: false
@@ -125,7 +105,7 @@ class App extends Component {
     });
 
     // Configure application details
-    hello.init({ azureADSignin: backendClientID, azureADSignup: backendClientID }, {
+    hello.init({ azureAD: backendClientID }, {
       redirect_uri: redirectUrl,
       scope: `openid https://${tenantName}.onmicrosoft.com/${backendClientApiID}/${backendClientScopeName}`,
       response_type: 'token id_token',
