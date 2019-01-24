@@ -1,0 +1,15 @@
+{
+  "name": "pool-party",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Julian Pittas <julian.pittas@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "azure-storage": "^2.10.2"
+  }
+}

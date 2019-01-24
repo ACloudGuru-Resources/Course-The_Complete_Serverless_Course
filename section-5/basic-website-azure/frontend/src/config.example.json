@@ -1,0 +1,11 @@
+{
+    "tenantName": "",
+    "signInPolicyName": "B2C_1_signin",
+    "signUpPolicyName": "B2C_1_signup",
+    "backendClientID": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+    "backendClientScopeName": "user_impersonation",
+    "backendClientApiID": "api",
+    "backendAPI": "https://xxxxxxxxxx.azurewebsites.net/api",
+    "storageAccountName": "xxxxxxxxxx",
+    "redirectUrl": "http://localhost:3000"
+}
