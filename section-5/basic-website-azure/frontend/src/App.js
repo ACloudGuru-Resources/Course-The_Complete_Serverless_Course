@@ -25,18 +25,16 @@ class App extends Component {
     error: '',
     user: null,
     picture: null,
-    response: null,
-    network: null
+    response: null
   }
 
   handleAuthLogin = ({ authResponse }) => {
 
-    const { access_token, id_token, network } = authResponse;
+    const { access_token, id_token } = authResponse;
 
     const decodedIDToken = jwtDecode(id_token);
 
     this.setState({
-      network: network,
       authenticated: true,
       user: {
         accessToken: access_token,
@@ -71,7 +69,7 @@ class App extends Component {
   }
 
   signOut = async () => {
-    await hello.logout(this.state.network, { force: true });
+    await hello.logout('azureAD', { force: true });
   }
 
   // When the page loads, we want to initialize our MSAL client and check if the user is signed in
