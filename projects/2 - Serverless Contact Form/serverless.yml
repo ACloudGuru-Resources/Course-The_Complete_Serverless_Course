@@ -1,0 +1,77 @@
+service: contactotron
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  profile: contactotron-admin
+  environment:
+    CONTACT_TOPIC_ARN:
+      Ref: contactotronTopic
+    CONTACT_TABLE_NAME:
+      Ref: contactotronMessagesTable
+
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - "sns:Publish"
+      Resource:
+        - Ref: contactotronTopic
+    - Effect: 'Allow'
+      Action:
+        - "dynamodb:PutItem"
+      Resource:
+        Fn::GetAtt:
+          - contactotronMessagesTable
+          - Arn
+
+package:
+  exclude:
+    - node_modules/**
+#  include:
+
+functions:
+  submitContactForm:
+    handler: handler.submitContactForm
+    events:
+      - http:
+          path: submitContactForm
+          method: post
+          cors: true
+  saveContactMessage:
+    handler: handler.saveContactMessage
+    events:
+      - sns:
+          arn:
+            Ref: contactotronTopic
+          topicName: contactotronTopic-${self:provider.stage}
+
+plugins:
+  - serverless-finch
+
+custom:
+  client:
+    bucketName: robin-contactotron-lab-demo-2019
+    distributionFolder: build/
+
+resources:
+  Resources:
+    contactotronTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        DisplayName: "Contactotron Contact Form"
+        TopicName: contactotronTopic-${self:provider.stage}
+
+    contactotronMessagesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1

@@ -1,0 +1,40 @@
+{
+    "parser": "babel-eslint",
+    "extends": "airbnb",
+    "plugins": [
+        "react",
+        "react-native"
+    ],
+    "rules": {
+        "func-names": [
+            "error",
+            "never"
+        ],
+        "react/prefer-stateless-function": [
+            0
+        ],
+        "react/jsx-filename-extension": [
+            0
+        ],
+        "indent": 0,
+        "react/jsx-indent": [
+            0
+        ],
+        "react/jsx-indent-props": [
+            0
+        ],
+        "comma-dangle": [
+            "error",
+            "never"
+        ]
+    },
+    "settings": {
+        "import/parser": "babel-eslint",
+        "import/resolve": {
+            "moduleDirectory": [
+                "node_modules",
+                "src"
+            ]
+        }
+    }
+}
