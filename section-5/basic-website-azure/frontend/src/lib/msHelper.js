@@ -12,7 +12,7 @@ const getLogoutUrl = (tenant, policy, redirectUri) => {
 }
 
 const getOauthUrl = (tenant, policy) => {
-    return `https://acgtestorg.b2clogin.com/te/${tenant}.onmicrosoft.com/${policy}/oauth2/v2.0`;
+    return `https://${tenant}.b2clogin.com/te/${tenant}.onmicrosoft.com/${policy}/oauth2/v2.0`;
 }
 
 export {
