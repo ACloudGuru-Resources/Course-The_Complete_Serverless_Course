@@ -1,0 +1,9 @@
+{
+    "backendAPI": "https://xx-xx-xx-xx.cloudfunctions.net",
+    "apiKey": "xx",
+    "authDomain": "xx-xx.firebaseapp.com",
+    "databaseURL": "https://xx-xx.firebaseio.com",
+    "projectId": "xx-xx",
+    "storageBucket": "xx-xx.appspot.com",
+    "messagingSenderId": "xx"
+}

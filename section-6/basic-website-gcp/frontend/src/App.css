@@ -1,0 +1,47 @@
+@import '~antd/dist/antd.css';
+
+.App {
+  text-align: center;
+}
+
+.App-header {
+  background-color: #222;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+  color: white;
+}
+
+.App-intro {
+  font-size: large;
+  padding-top: 20px;
+}
+
+.buttonLink {
+    background-color: transparent;
+    border: 0px solid transparent;
+    height: 100%;
+    width: 100%;
+    color: white;
+}
+
+.buttonLink:hover {
+    background-color: white;
+    color: #222;
+    cursor: pointer;
+}
+
+.ant-layout-header {
+  height: auto;
+}
+
+#root {
+  height: 100%;
+}
+
+#root > .layout.ant-layout {
+  height: 100%;
+}
