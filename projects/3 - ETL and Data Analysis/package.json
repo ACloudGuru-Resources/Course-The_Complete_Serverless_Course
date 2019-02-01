@@ -7,5 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Robin Norwood <robin@acloud.guru>",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "fast-csv": "^2.4.1"
+  }
 }
