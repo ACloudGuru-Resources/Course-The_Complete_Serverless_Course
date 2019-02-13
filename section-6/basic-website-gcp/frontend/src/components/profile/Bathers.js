@@ -15,7 +15,7 @@ class Bathers extends React.Component {
         try {
 
             const response = await this.props.APIService.callAPIWithAuth(
-                'bathers',
+                'bathers/',
                 this.props.user.idToken
             ).then(response => response.json())
 
@@ -39,7 +39,7 @@ class Bathers extends React.Component {
 
         try {
             const response = await this.props.APIService.callAPIWithAuth(
-                'bathers',
+                'bathers/',
                 this.props.user.idToken,
                 {
                     method: 'POST',

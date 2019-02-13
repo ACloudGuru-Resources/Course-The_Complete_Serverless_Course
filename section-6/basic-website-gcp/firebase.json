@@ -5,11 +5,16 @@
   },
   "functions": {
     "predeploy": [
+      "cd backend && npm install",
       "npm --prefix \"$RESOURCE_DIR\" run lint"
     ],
     "source": "backend"
   },
   "hosting": {
+    "predeploy": [
+      "cd frontend && npm install",
+      "cd frontend && npm run build"
+    ],
     "public": "frontend/build",
     "ignore": [
       "firebase.json",
