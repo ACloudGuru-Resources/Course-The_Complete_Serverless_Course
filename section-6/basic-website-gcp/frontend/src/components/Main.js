@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import { Footer } from './template';
 import Home from './pages/Home';
 import Register from './pages/Register';
-import Verify from './pages/Verify';
 import Signin from './pages/SignIn';
 
 const { Content } = Layout;
@@ -41,7 +40,6 @@ const Main = (props) => {
                                 <Route exact path="/" render={() => <Home {...props} />
                                 } />
                                 <Route exact path="/register" render={() => <Register fbAuth={props.fbAuth} />} />
-                                <Route exact path="/verify" render={() => <Verify authenticated={props.authMod} userLoggedIn={props.userLoggedIn} verified={props.userVerified} />} />
                                 <Route exact path="/signin" render={() => <Signin fbAuth={props.fbAuth} />} />
                             </Switch>)
                         }

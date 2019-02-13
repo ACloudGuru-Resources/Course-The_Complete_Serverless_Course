@@ -26,7 +26,8 @@ class SignInForm extends React.Component {
     this.props.form.validateFields(async (err, values) => {
       if (!err) {
         try {
-          await this.props.fbAuth.signInWithEmailAndPassword(values.username, values.password);
+          const result = await this.props.fbAuth.signInWithEmailAndPassword(values.username, values.password);
+          console.log(result);
           this.props.history.push('/');
         } catch (error) {
           console.error(error);

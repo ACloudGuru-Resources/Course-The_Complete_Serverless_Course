@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Layout } from 'antd';
+import { withRouter } from 'react-router-dom';
 
 /* Load firebase */
 import firebase from 'firebase/app';
@@ -39,7 +40,8 @@ class App extends Component {
 
   getStorage = async () => {
     const uid = this.state.user.id;
-    const profileUrl = await this.state.fbStorage.ref(`/users/${uid}/profile.png`).getDownloadURL();
+    const firebaseStorageRef = await this.state.fbStorage.ref(`users/${uid}/profile.png`);
+    const profileUrl = await firebaseStorageRef.getDownloadURL();
     await this.setState({
       picture: profileUrl
     });
@@ -47,12 +49,11 @@ class App extends Component {
 
   setApplicationUser = async (loggedInUser) => {
 
-    const userPreferences = await this.state.fbDB.collection('userPreferences').doc(`${loggedInUser.uid}`).get();
+    const userPreferences = await this.state.fbDB.collection('users').doc(`${loggedInUser.uid}`).get();
     const idToken = await loggedInUser.getIdToken();
-
+    
     await this.setState({
       authenticated: true,
-      verified: true,
       user: {
         email: loggedInUser.email,
         id: loggedInUser.uid,
@@ -68,20 +69,9 @@ class App extends Component {
 
   handleAuthLogin = (user) => {
 
-    if (user && user.emailVerified) {
+    if (user) {
 
       this.setApplicationUser(user);
-
-    } else if (user) {
-
-      this.setState(
-        {
-          userLoggedIn: true,
-          loggedInUser: user,
-          verified: false,
-          loading: false
-        }
-      );
 
     } else {
 
@@ -89,7 +79,6 @@ class App extends Component {
         {
           userLoggedIn: false,
           loggedInUser: null,
-          verified: false,
           loading: false
         }
       );
@@ -126,7 +115,7 @@ class App extends Component {
 
     return (
       <Layout className="layout">
-        <Header signInHandler={this.signIn} signOutHandler={this.signOut} authenticated={authenticated} />
+        <Header signOutHandler={this.signOut} authenticated={authenticated} />
 
         <Main
           loading={loading}
@@ -144,6 +133,6 @@ class App extends Component {
   }
 }
 
-const WrappedComponent = withAPIService(App);
+const WrappedComponent = withRouter(withAPIService(App));
 
 export default WrappedComponent;
