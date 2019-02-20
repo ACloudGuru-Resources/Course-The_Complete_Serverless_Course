@@ -1,0 +1,28 @@
+service: datalyzer
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  profile: datalyzer-admin
+  region: us-east-1
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "s3:GetObject"
+      Resource:
+        - "arn:aws:s3:::gdelt-open-data/*"
+    - Effect: "Allow"
+      Action:
+        - "firehose:PutRecord"
+      Resource: ""
+  environment:
+    DATALYZER_INGEST_STREAM_NAME: datalyzer_ingest
+
+functions:
+  ingestGdeltData:
+    handler: handler.ingestGdeltData
+    timeout: 60
+    events:
+      - sns:
+          arn: arn:aws:sns:us-east-1:928094251383:gdelt-csv
+          topicName: gdelt-csv
